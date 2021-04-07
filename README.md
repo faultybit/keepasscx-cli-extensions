@@ -1,0 +1,1 @@
+# keepasscx-cli-extensions
