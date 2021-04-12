@@ -124,45 +124,52 @@ class TestDBEntry(unittest.TestCase):
                        password_hash=DBEntry.create_password_hash('a', 'b'), url='https://www.gmail.com', notes='nnn')
         self.assertEqual(left, left)
 
-    def test_equals_diff_1(self):
+    def test_equals_diff_the_same_values(self):
+        left = DBEntry(path='/a/b', title='testtitle', user_name='test_username',
+                       password_hash=DBEntry.create_password_hash('a', 'b'), url='https://www.gmail.com', notes='nnn')
+        right = DBEntry(path='/a/b', title='testtitle', user_name='test_username',
+                        password_hash=DBEntry.create_password_hash('a', 'b'), url='https://www.gmail.com', notes='nnn')
+        self.assertEqual(left, right)
+
+    def test_equals_diff_path(self):
         left = DBEntry(path='/a/b', title='testtitle', user_name='test_username',
                        password_hash=DBEntry.create_password_hash('a', 'b'), url='https://www.gmail.com', notes='nnn')
         right = DBEntry(path='/a/c', title='testtitle', user_name='test_username',
-                        password_hash=DBEntry.create_password_hash('a', 'b'), url='https://www.gmail.com', notes='nnn')
-        self.assertEqual(left, right)
+                        password_hash=DBEntry.create_password_hash('a', 'b'), url='https://www.gmail.com', notes='nnn2')
+        self.assertNotEqual(left, right)
 
     def test_equals_diff_title(self):
         left = DBEntry(path='/a/b', title='testtitle', user_name='test_username',
                        password_hash=DBEntry.create_password_hash('a', 'b'), url='https://www.gmail.com', notes='nnn')
-        right = DBEntry(path='/a/c', title='testtitle1', user_name='test_username',
+        right = DBEntry(path='/a/b', title='testtitle1', user_name='test_username',
                         password_hash=DBEntry.create_password_hash('a', 'b'), url='https://www.gmail.com', notes='nnn')
         self.assertNotEqual(left, right)
 
     def test_equals_diff_user_name(self):
         left = DBEntry(path='/a/b', title='testtitle', user_name='test_username',
                        password_hash=DBEntry.create_password_hash('a', 'b'), url='https://www.gmail.com', notes='nnn')
-        right = DBEntry(path='/a/c', title='testtitle', user_name='test_username1',
+        right = DBEntry(path='/a/b', title='testtitle', user_name='test_username1',
                         password_hash=DBEntry.create_password_hash('a', 'b'), url='https://www.gmail.com', notes='nnn')
         self.assertNotEqual(left, right)
 
     def test_equals_diff_password(self):
         left = DBEntry(path='/a/b', title='testtitle', user_name='test_username',
                        password_hash=DBEntry.create_password_hash('a', 'b'), url='https://www.gmail.com', notes='nnn')
-        right = DBEntry(path='/a/c', title='testtitle', user_name='test_username',
+        right = DBEntry(path='/a/b', title='testtitle', user_name='test_username',
                         password_hash=DBEntry.create_password_hash('b', 'b'), url='https://www.gmail.com', notes='nnn')
         self.assertNotEqual(left, right)
 
     def test_equals_diff_url(self):
         left = DBEntry(path='/a/b', title='testtitle', user_name='test_username',
                        password_hash=DBEntry.create_password_hash('a', 'b'), url='https://www.gmail.com', notes='nnn')
-        right = DBEntry(path='/a/c', title='testtitle', user_name='test_username',
+        right = DBEntry(path='/a/b', title='testtitle', user_name='test_username',
                         password_hash=DBEntry.create_password_hash('a', 'b'), url='https://www.gmail2.com', notes='nnn')
         self.assertNotEqual(left, right)
 
     def test_equals_diff_notes(self):
         left = DBEntry(path='/a/b', title='testtitle', user_name='test_username',
                        password_hash=DBEntry.create_password_hash('a', 'b'), url='https://www.gmail.com', notes='nnn')
-        right = DBEntry(path='/a/c', title='testtitle', user_name='test_username',
+        right = DBEntry(path='/a/b', title='testtitle', user_name='test_username',
                         password_hash=DBEntry.create_password_hash('a', 'b'), url='https://www.gmail.com', notes='nnn2')
         self.assertNotEqual(left, right)
 
@@ -170,7 +177,145 @@ class TestDBEntry(unittest.TestCase):
         [
             ['path', 'title', 'user_name', 'password', 'url', 'notes'],
             ['path', 'title', 'user_name', 'password', 'url', 'notes'],
-            [False, False, False, False, False, False, False],
+            [False, False, False, False, False, False],
+            True
+        ],
+        [
+            ['path', 'title', 'user_name', 'password', 'url', 'notes'],
+            ['path2', 'title', 'user_name', 'password', 'url', 'notes'],
+            [False, False, False, False, False, False],
+            False
+        ],
+        [
+            ['path', 'title', 'user_name', 'password', 'url', 'notes'],
+            ['path2', 'title', 'user_name', 'password', 'url', 'notes'],
+            [True, False, False, False, False, False],
+            True
+        ],
+        [
+            ['path', 'title', 'user_name', 'password', 'url', 'notes'],
+            ['path', 'title2', 'user_name', 'password', 'url', 'notes'],
+            [False, False, False, False, False, False],
+            False
+        ],
+        [
+            ['path', 'title', 'user_name', 'password', 'url', 'notes'],
+            ['path', 'title2', 'user_name', 'password', 'url', 'notes'],
+            [False, True, False, False, False, False],
+            True
+        ],
+        [
+            ['path', 'title', 'user_name', 'password', 'url', 'notes'],
+            ['path', 'title', 'user_name2', 'password', 'url', 'notes'],
+            [False, False, False, False, False, False],
+            False
+        ],
+        [
+            ['path', 'title', 'user_name', 'password', 'url', 'notes'],
+            ['path', 'title', 'user_name2', 'password', 'url', 'notes'],
+            [False, False, True, False, False, False],
+            True
+        ],
+        [
+            ['path', 'title', 'user_name', 'password', 'url', 'notes'],
+            ['path', 'title', 'user_name', 'password2', 'url', 'notes'],
+            [False, False, False, False, False, False],
+            False
+        ],
+        [
+            ['path', 'title', 'user_name', 'password', 'url', 'notes'],
+            ['path', 'title', 'user_name', 'password2', 'url', 'notes'],
+            [False, False, False, True, False, False],
+            True
+        ],
+        [
+            ['path', 'title', 'user_name', 'password', 'url', 'notes'],
+            ['path', 'title', 'user_name', 'password', 'url2', 'notes'],
+            [False, False, False, False, False, False],
+            False
+        ],
+        [
+            ['path', 'title', 'user_name', 'password', 'url', 'notes'],
+            ['path', 'title', 'user_name', 'password', 'url2', 'notes'],
+            [False, False, False, False, True, False],
+            True
+        ],
+        [
+            ['path', 'title', 'user_name', 'password', 'url', 'notes'],
+            ['path', 'title', 'user_name', 'password', 'url', 'notes2'],
+            [False, False, False, False, False, False],
+            False
+        ],
+        [
+            ['path', 'title', 'user_name', 'password', 'url', 'notes'],
+            ['path', 'title', 'user_name', 'password', 'url', 'notes2'],
+            [False, False, False, False, False, True],
+            True
+        ],
+        [
+            ['path', 'title', 'user_name', 'password', 'url', 'notes'],
+            ['path2', 'title2', 'user_name', 'password', 'url', 'notes'],
+            [True, False, False, False, False, False],
+            False
+        ],
+        [
+            ['path', 'title', 'user_name', 'password', 'url', 'notes'],
+            ['path2', 'title2', 'user_name', 'password', 'url', 'notes'],
+            [True, True, False, False, False, False],
+            True
+        ],
+        [
+            ['path', 'title', 'user_name', 'password', 'url', 'notes'],
+            ['path2', 'title2', 'user_name2', 'password', 'url', 'notes'],
+            [True, True, False, False, False, False],
+            False
+        ],
+        [
+            ['path', 'title', 'user_name', 'password', 'url', 'notes'],
+            ['path2', 'title2', 'user_name2', 'password', 'url', 'notes'],
+            [True, True, False, False, False, False],
+            False
+        ],
+        [
+            ['path', 'title', 'user_name', 'password', 'url', 'notes'],
+            ['path2', 'title2', 'user_name2', 'password', 'url', 'notes'],
+            [True, True, True, False, False, False],
+            True
+        ],
+        [
+            ['path', 'title', 'user_name', 'password', 'url', 'notes'],
+            ['path2', 'title2', 'user_name2', 'password2', 'url', 'notes'],
+            [True, True, True, False, False, False],
+            False
+        ],
+        [
+            ['path', 'title', 'user_name', 'password', 'url', 'notes'],
+            ['path2', 'title2', 'user_name2', 'password2', 'url', 'notes'],
+            [True, True, True, True, False, False],
+            True
+        ],
+        [
+            ['path', 'title', 'user_name', 'password', 'url', 'notes'],
+            ['path2', 'title2', 'user_name2', 'password2', 'url2', 'notes'],
+            [True, True, True, True, False, False],
+            False
+        ],
+        [
+            ['path', 'title', 'user_name', 'password', 'url', 'notes'],
+            ['path2', 'title2', 'user_name2', 'password2', 'url2', 'notes'],
+            [True, True, True, True, True, False],
+            True
+        ],
+        [
+            ['path', 'title', 'user_name', 'password', 'url', 'notes'],
+            ['path2', 'title2', 'user_name2', 'password2', 'url2', 'notes2'],
+            [True, True, True, True, True, False],
+            False
+        ],
+        [
+            ['path', 'title', 'user_name', 'password', 'url', 'notes'],
+            ['path2', 'title2', 'user_name2', 'password2', 'url2', 'notes2'],
+            [True, True, True, True, True, True],
             True
         ]
     ])
